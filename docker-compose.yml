@@ -5,6 +5,9 @@ services:
       dockerfile: services/api-gateway/Dockerfile
     env_file:
       - .env
+    environment:
+      AUTH_SERVICE_URL: http://auth-service:3001
+      EVENT_SERVICE_URL: http://event-service:3002
     command: npm run dev -w services/api-gateway
     volumes:
       - ./services/api-gateway:/app/services/api-gateway
