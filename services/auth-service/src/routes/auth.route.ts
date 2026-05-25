@@ -37,6 +37,7 @@ authRouter.post("/login", async (req, res) => {
 
 authRouter.post("/refresh", async (req, res) => {
   const parsed = refreshSchema.safeParse(req.body);
+  console.log("Received token refresh request with body:", req.body);
   if (!parsed.success) {
     return res.status(400).json({ message: parsed.error.flatten() });
   }
@@ -46,7 +47,7 @@ authRouter.post("/refresh", async (req, res) => {
     return res.status(401).json({ message: "Invalid refresh token" });
   }
 
-  return res.json(token);
+  return res.json({...token, success: true});
 });
 
 authRouter.post("/logout", async (req, res) => {
