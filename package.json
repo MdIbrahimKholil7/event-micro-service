@@ -1,0 +1,21 @@
+{
+  "name": "event-ticketing",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": [
+    "services/*"
+  ],
+  "scripts": {
+    "build": "npm run build -ws",
+    "start": "npm run start -ws",
+    "dev:up": "docker compose up -d --build",
+    "dev:down": "docker compose down",
+    "db:generate": "powershell -ExecutionPolicy Bypass -File ./scripts/db-generate.ps1",
+    "db:migrate": "powershell -ExecutionPolicy Bypass -File ./scripts/db-migrate.ps1",
+    "db:download": "powershell -ExecutionPolicy Bypass -File ./scripts/db-download.ps1",
+    "db:restore": "powershell -ExecutionPolicy Bypass -File ./scripts/db-restore.ps1"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "info": {
+    "name": "Event Ticketing - Event Service",
+    "_postman_id": "f2f27714-d4bd-444d-bde8-e95b72f4e19c",
+    "description": "Event service collection for CRUD and health.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{event_base_url}}/health"
+      }
+    },
+    {
+      "name": "Create Event",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const json = pm.response.json();",
+              "if (json.id) pm.environment.set('event_id', json.id);"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Tech Conference 2026\",\n  \"description\": \"Annual engineering conference\",\n  \"location\": \"Dhaka Convention Hall\",\n  \"startsAt\": \"2026-07-01T10:00:00.000Z\",\n  \"endsAt\": \"2026-07-01T18:00:00.000Z\",\n  \"organizerId\": \"org-1001\",\n  \"published\": true\n}"
+        },
+        "url": "{{event_base_url}}/events"
+      }
+    },
+    {
+      "name": "List Events",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{event_base_url}}/events"
+      }
+    },
+    {
+      "name": "Get Event By ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{event_base_url}}/events/{{event_id}}"
+      }
+    },
+    {
+      "name": "Update Event",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Tech Conference 2026 - Updated\",\n  \"location\": \"Dhaka Expo Center\",\n  \"published\": true\n}"
+        },
+        "url": "{{event_base_url}}/events/{{event_id}}"
+      }
+    },
+    {
+      "name": "Delete Event",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": "{{event_base_url}}/events/{{event_id}}"
+      }
+    }
+  ]
+}
