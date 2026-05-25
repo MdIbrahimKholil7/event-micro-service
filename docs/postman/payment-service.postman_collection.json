@@ -1,0 +1,32 @@
+{
+  "info": {
+    "name": "Event Ticketing - Payment Service",
+    "_postman_id": "ff245f74-6f14-4f80-a61f-e93da8dcf56f",
+    "description": "Payment service collection for create/list/get/update and health.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    { "name": "Health", "request": { "method": "GET", "header": [], "url": "{{payment_base_url}}/health" } },
+    {
+      "name": "Create Payment",
+      "event": [{ "listen": "test", "script": { "exec": ["const json = pm.response.json();","if (json.id) pm.environment.set('payment_id', json.id);"], "type": "text/javascript" } }],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"orderId\": \"{{order_id}}\",\n  \"amount\": 150.00,\n  \"currency\": \"USD\",\n  \"provider\": \"mock\"\n}" },
+        "url": "{{payment_base_url}}/payments"
+      }
+    },
+    { "name": "List Payments", "request": { "method": "GET", "header": [], "url": "{{payment_base_url}}/payments" } },
+    { "name": "Get Payment By ID", "request": { "method": "GET", "header": [], "url": "{{payment_base_url}}/payments/{{payment_id}}" } },
+    {
+      "name": "Update Payment Status",
+      "request": {
+        "method": "PATCH",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"status\": \"SUCCESS\",\n  \"transactionRef\": \"txn_123456\"\n}" },
+        "url": "{{payment_base_url}}/payments/{{payment_id}}"
+      }
+    }
+  ]
+}

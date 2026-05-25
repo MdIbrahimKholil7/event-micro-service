@@ -9,6 +9,8 @@ export const envSchema = z.object({
   DEFAULT_TIMEOUT: z.coerce.number().default(5000),
   AUTH_SERVICE_URL: z.string().url(),
   EVENT_SERVICE_URL: z.string().url(),
+  ORDER_SERVICE_URL: z.string().url().optional(),
+  PAYMENT_SERVICE_URL: z.string().url().optional(),
   ACCOUNTS_SERVICE_URL: z.string().url().optional(),
   TRANSACTION_SERVICE_URL: z.string().url().optional()
 });

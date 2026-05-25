@@ -8,6 +8,8 @@ services:
     environment:
       AUTH_SERVICE_URL: http://auth-service:3001
       EVENT_SERVICE_URL: http://event-service:3002
+      ORDER_SERVICE_URL: http://order-service:3003
+      PAYMENT_SERVICE_URL: http://payment-service:3004
       CHOKIDAR_USEPOLLING: "true"
       CHOKIDAR_INTERVAL: "300"
     command: npm run dev -w services/api-gateway
@@ -23,6 +25,10 @@ services:
       auth-service:
         condition: service_healthy
       event-service:
+        condition: service_healthy
+      order-service:
+        condition: service_healthy
+      payment-service:
         condition: service_healthy
     networks:
       - backend
@@ -91,6 +97,68 @@ services:
     networks:
       - backend
 
+  order-service:
+    build:
+      context: .
+      dockerfile: services/order-service/Dockerfile
+    env_file:
+      - .env
+    environment:
+      CHOKIDAR_USEPOLLING: "true"
+      CHOKIDAR_INTERVAL: "300"
+    command: npm run dev -w services/order-service
+    volumes:
+      - ./services/order-service:/app/services/order-service
+      - ./package.json:/app/package.json
+      - ./package-lock.json:/app/package-lock.json
+      - ./tsconfig.base.json:/app/tsconfig.base.json
+      - ./services/order-service/tsconfig.json:/app/services/order-service/tsconfig.json
+    ports:
+      - "3003:3003"
+    depends_on:
+      postgres-order:
+        condition: service_healthy
+      kafka:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3003/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+    networks:
+      - backend
+
+  payment-service:
+    build:
+      context: .
+      dockerfile: services/payment-service/Dockerfile
+    env_file:
+      - .env
+    environment:
+      CHOKIDAR_USEPOLLING: "true"
+      CHOKIDAR_INTERVAL: "300"
+    command: npm run dev -w services/payment-service
+    volumes:
+      - ./services/payment-service:/app/services/payment-service
+      - ./package.json:/app/package.json
+      - ./package-lock.json:/app/package-lock.json
+      - ./tsconfig.base.json:/app/tsconfig.base.json
+      - ./services/payment-service/tsconfig.json:/app/services/payment-service/tsconfig.json
+    ports:
+      - "3004:3004"
+    depends_on:
+      postgres-payment:
+        condition: service_healthy
+      kafka:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3004/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+    networks:
+      - backend
+
   postgres-auth:
     image: postgres:16-alpine
     environment:
@@ -121,6 +189,42 @@ services:
       - postgres_event_data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U event_user -d event_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - backend
+
+  postgres-order:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: order_db
+      POSTGRES_USER: order_user
+      POSTGRES_PASSWORD: order_pass
+    ports:
+      - "5435:5432"
+    volumes:
+      - postgres_order_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U order_user -d order_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - backend
+
+  postgres-payment:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: payment_db
+      POSTGRES_USER: payment_user
+      POSTGRES_PASSWORD: payment_pass
+    ports:
+      - "5436:5432"
+    volumes:
+      - postgres_payment_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U payment_user -d payment_db"]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -188,6 +292,8 @@ services:
 volumes:
   postgres_auth_data:
   postgres_event_data:
+  postgres_order_data:
+  postgres_payment_data:
   redis_data:
   kafka_data:
   zookeeper_data:
