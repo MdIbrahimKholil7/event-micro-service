@@ -8,6 +8,7 @@ export const createEventSchema = z
     startsAt: z.string().datetime(),
     endsAt: z.string().datetime(),
     organizerId: z.string().min(1),
+    totalSeats: z.number().int().positive(),
     published: z.boolean().optional()
   })
   .refine((v) => new Date(v.endsAt).getTime() > new Date(v.startsAt).getTime(), {
@@ -23,6 +24,7 @@ export const updateEventSchema = z
     startsAt: z.string().datetime().optional(),
     endsAt: z.string().datetime().optional(),
     organizerId: z.string().min(1).optional(),
+    totalSeats: z.number().int().positive().optional(),
     published: z.boolean().optional()
   })
   .refine(

@@ -1,0 +1,32 @@
+{
+  "info": {
+    "name": "Event Ticketing - Order Service",
+    "_postman_id": "a4f41d01-0aa3-46c0-b312-7f34e2544fbe",
+    "description": "Order service collection for create/list/get/update status and health.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    { "name": "Health", "request": { "method": "GET", "header": [], "url": "{{order_base_url}}/health" } },
+    {
+      "name": "Create Order",
+      "event": [{ "listen": "test", "script": { "exec": ["const json = pm.response.json();","if (json.id) pm.environment.set('order_id', json.id);"], "type": "text/javascript" } }],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"userId\": \"user-1001\",\n  \"eventId\": \"{{event_id}}\",\n  \"seatCount\": 2,\n  \"totalAmount\": 150.00,\n  \"currency\": \"USD\"\n}" },
+        "url": "{{order_base_url}}/orders"
+      }
+    },
+    { "name": "List Orders", "request": { "method": "GET", "header": [], "url": "{{order_base_url}}/orders" } },
+    { "name": "Get Order By ID", "request": { "method": "GET", "header": [], "url": "{{order_base_url}}/orders/{{order_id}}" } },
+    {
+      "name": "Update Order Status",
+      "request": {
+        "method": "PATCH",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"status\": \"CONFIRMED\"\n}" },
+        "url": "{{order_base_url}}/orders/{{order_id}}"
+      }
+    }
+  ]
+}

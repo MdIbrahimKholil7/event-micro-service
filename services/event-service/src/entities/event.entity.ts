@@ -29,6 +29,12 @@ export class EventEntity {
   @Column({ name: "organizer_id", type: "varchar", length: 100 })
   organizerId!: string;
 
+  @Column({ name: "total_seats", type: "int", default: 100 })
+  totalSeats!: number;
+
+  @Column({ name: "available_seats", type: "int", default: 100 })
+  availableSeats!: number;
+
   @Column({ name: "published", type: "boolean", default: false })
   published!: boolean;
 

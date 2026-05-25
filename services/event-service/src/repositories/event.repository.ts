@@ -8,6 +8,7 @@ export interface CreateEventInput {
   startsAt: Date;
   endsAt: Date;
   organizerId: string;
+  totalSeats: number;
   published?: boolean;
 }
 
@@ -18,6 +19,7 @@ export interface UpdateEventInput {
   startsAt?: Date;
   endsAt?: Date;
   organizerId?: string;
+  totalSeats?: number;
   published?: boolean;
 }
 

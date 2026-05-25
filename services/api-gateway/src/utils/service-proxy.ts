@@ -24,6 +24,30 @@ export class ServiceProxy {
       timeout: 15000,
       requireAuth: true
     },
+    ...(config.ORDER_SERVICE_URL
+      ? [
+          {
+            path: "/api/v1/orders",
+            url: config.ORDER_SERVICE_URL,
+            pathRewrite: { "^/": "/orders/" },
+            name: "order-service",
+            timeout: 15000,
+            requireAuth: true
+          } satisfies ServiceConfig
+        ]
+      : []),
+    ...(config.PAYMENT_SERVICE_URL
+      ? [
+          {
+            path: "/api/v1/payments",
+            url: config.PAYMENT_SERVICE_URL,
+            pathRewrite: { "^/": "/payments/" },
+            name: "payment-service",
+            timeout: 15000,
+            requireAuth: true
+          } satisfies ServiceConfig
+        ]
+      : []),
   ];
 
   private static createProxyConfig(serviceConfig: ServiceConfig) {
