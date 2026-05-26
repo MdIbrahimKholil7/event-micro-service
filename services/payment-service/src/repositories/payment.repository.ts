@@ -17,7 +17,7 @@ export class PaymentRepository {
       amount: input.amount.toFixed(2),
       currency: input.currency ?? "USD",
       provider: input.provider ?? "mock",
-      status: "PENDING",
+      status: "SUCCESS",
       transactionRef: null
     });
     return this.repo.save(entity);

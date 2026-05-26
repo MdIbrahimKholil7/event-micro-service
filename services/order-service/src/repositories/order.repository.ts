@@ -1,5 +1,5 @@
 import { AppDataSource } from "../db/data-source";
-import { OrderEntity } from "../entities/order.entity";
+import { OrderEntity, type OrderStatus } from "../entities/order.entity";
 
 export interface CreateOrderInput {
   userId: string;
@@ -30,7 +30,7 @@ export class OrderRepository {
     return this.repo.findOneBy({ id });
   }
 
-  public async updateStatus(existing: OrderEntity, status: "PENDING" | "CONFIRMED" | "CANCELLED") {
+  public async updateStatus(existing: OrderEntity, status: OrderStatus) {
     existing.status = status;
     return this.repo.save(existing);
   }

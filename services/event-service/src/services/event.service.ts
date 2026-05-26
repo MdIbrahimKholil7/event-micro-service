@@ -37,6 +37,18 @@ export class EventService {
     return this.repo.update(existing, input);
   }
 
+  public async reserveSeats(eventId: string, seatCount: number) {
+    return this.repo.reserveSeats(eventId, seatCount);
+  }
+
+  public async confirmSeats(eventId: string, seatCount: number) {
+    return this.repo.confirmSeats(eventId, seatCount);
+  }
+
+  public async releaseSeats(eventId: string, seatCount: number) {
+    return this.repo.releaseSeats(eventId, seatCount);
+  }
+
   public async deleteEvent(id: string) {
     return this.repo.deleteById(id);
   }

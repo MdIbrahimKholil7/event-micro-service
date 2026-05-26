@@ -1,6 +1,7 @@
 import express, { type NextFunction, type Request, type Response } from "express";
 import helmet from "helmet";
 import pinoHttp from "pino-http";
+import { errorMiddleware, notFoundMiddleware } from "./middlewares/error.middleware";
 import { healthRouter } from "./routes/health.route";
 import { paymentRouter } from "./routes/payment.route";
 import logger from "./utils/logger";
@@ -15,10 +16,10 @@ export class PaymentServiceApp {
 
     this.app.use("/health", healthRouter);
     this.app.use("/", paymentRouter);
+    this.app.use(notFoundMiddleware);
 
-    this.app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
-      logger.error({ err }, "Unhandled payment-service error");
-      res.status(500).json({ message: "Internal server error" });
+    this.app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+      errorMiddleware(err, req, res, next);
     });
 
     return this.app;
