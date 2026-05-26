@@ -9,5 +9,5 @@ export const createOrderSchema = z.object({
 });
 
 export const updateOrderSchema = z.object({
-  status: z.enum(["PENDING", "CONFIRMED", "CANCELLED"]).optional()
+  status: z.enum(["PENDING", "PROCESSING", "CONFIRMED", "FAILED", "PAYMENT_FAILED", "CANCELLED"]).optional()
 });

@@ -30,7 +30,8 @@ export const envSchema = z.object({
   EVENT_DB_PORT: z.coerce.number().default(5432),
   EVENT_DB_NAME: z.string(),
   EVENT_DB_USER: z.string(),
-  EVENT_DB_PASSWORD: z.string()
+  EVENT_DB_PASSWORD: z.string(),
+  KAFKA_BROKER: z.string().default("kafka:9092")
 });
 
 const parsedConfig = envSchema.parse(process.env);

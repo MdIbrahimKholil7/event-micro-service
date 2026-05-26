@@ -6,7 +6,7 @@ import {
   UpdateDateColumn
 } from "typeorm";
 
-export type OrderStatus = "PENDING" | "CONFIRMED" | "CANCELLED";
+export type OrderStatus = "PENDING" | "PROCESSING" | "CONFIRMED" | "FAILED" | "PAYMENT_FAILED" | "CANCELLED";
 
 @Entity({ name: "orders" })
 export class OrderEntity {
